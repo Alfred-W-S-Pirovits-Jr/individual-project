@@ -134,3 +134,57 @@ def rolling_average_baselines(train, validate, yhat_df, eval_df):
             eval_df = append_eval_df(f'rolling_average_of_{p}_fortnights',
                                     'average_delay', validate, yhat_df, eval_df)
     return eval_df
+
+#returns seasonal only returns fit 3 for now as it is the best for AA but will work on later
+def holts_average_delay(train, validate, yhat_df, eval_df):
+    
+    #Loops through all the fits
+    for i in range(1,5):
+    
+        hst_average_delay_fit1 = ExponentialSmoothing(train.average_delay, seasonal_periods=26, trend='add', seasonal='add').fit()
+        hst_average_delay_fit2 = ExponentialSmoothing(train.average_delay, seasonal_periods=26, trend='add', seasonal='mul').fit()
+        hst_average_delay_fit3 = ExponentialSmoothing(train.average_delay, seasonal_periods=26, trend='add', seasonal='add', damped=True).fit()
+        hst_average_delay_fit4 = ExponentialSmoothing(train.average_delay, seasonal_periods=26, trend='add', seasonal='mul', damped=True).fit()
+
+        # hst_list = [hst_average_delay_fit1, hst_average_delay_fit2, hst_average_delay_fit3, hst_average_delay_fit4]
+        # best_hst = min(hst_list)
+
+        results_average_delay=pd.DataFrame({'model':['hst_average_delay_fit1', 'hst_average_delay_fit2', 'hst_average_dalay_fit3', 'hst_average_delay_fit4'],
+                                      'SSE':[hst_average_delay_fit1.sse, hst_average_delay_fit2.sse, hst_average_delay_fit3.sse, hst_average_delay_fit4.sse]})
+        results_average_delay.sort_values(by='SSE')
+
+        yhat_df = pd.DataFrame({'average_delay': hst_average_delay_fit3.forecast(validate.shape[0] + 1)},
+                                  index=validate.index)
+        yhat_df.head()
+
+        plot_and_eval('average_delay', train, validate, yhat_df)
+
+        eval_df = append_eval_df('holts_seasonal', 'average_delay', validate, yhat_df, eval_df)
+
+        return eval_df
+    
+def holt_linear(train, validate, yhat_df, eval_df):
+    linear_model = Holt(train['average_delay'], exponential=False, damped=True)
+    linear_model = linear_model.fit(optimized=True)
+    yhat_values = linear_model.predict(start = validate.index[0],
+                              end = validate.index[-1])
+    yhat_df['average_delay'] = round(yhat_values, 2)
+
+    plot_and_eval('average_delay', train, validate, yhat_df)
+
+    eval_df = append_eval_df('holts_linear_trend', 'average_delay', validate, yhat_df, eval_df)
+    return eval_df
+
+def previous_period(train, validate, yhat_df, eval_df):
+    # find previous 2 year periods and append to validate as prediction
+    yhat_df = train.loc['2015':'2017'] + train.diff(53).mean()
+
+    # yhat_df = index of validate
+    yhat_df.index = validate.index
+
+    plot_and_eval('average_delay', train, validate, yhat_df)
+    
+    eval_df = append_eval_df('previous 2 years', 'average_delay', validate, yhat_df, eval_df)
+
+    return eval_df
+

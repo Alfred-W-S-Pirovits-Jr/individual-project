@@ -19,17 +19,28 @@ def plot_average_by_interval(flights_daily_mean):
     resample_dict = {'D':'Daily', 'W':'Weekly', '2W':'FORTNIGHTLY', 'M':'Monthly', '3M':'Quarterly', '6M':'Semi-Annually', 'Y':'Yearly'}
 
     for _ in resample_dict:
-        plt.figure(figsize=(10,6))
+        if _ == '2W':
+            plt.figure(figsize=(10,6))
 
-        flights_daily_mean.resample(_).mean().average_delay.plot(label='daily')
+            flights_daily_mean.resample(_).mean().average_delay.plot(label='daily', color = '#4daf4a')
 
-        plt.title(f'{resample_dict[_][0:]} Average Delay')
-        plt.legend()
-        plt.show()
+            plt.title(f'{resample_dict[_][0:]} Average Delay')
+            plt.legend()
+            plt.show()
 
-        pd.plotting.autocorrelation_plot(flights_daily_mean.average_delay.resample(_).mean())
-        plt.show()
+            pd.plotting.autocorrelation_plot(flights_daily_mean.average_delay.resample(_).mean(), color = '#4daf4a')
+            plt.show()
+        else:
+            plt.figure(figsize=(10,6))
 
+            flights_daily_mean.resample(_).mean().average_delay.plot(label='daily')
+
+            plt.title(f'{resample_dict[_][0:]} Average Delay')
+            plt.legend()
+            plt.show()
+
+            pd.plotting.autocorrelation_plot(flights_daily_mean.average_delay.resample(_).mean())
+            plt.show()
 #Just Shows the best correlated lag plot
 def plot_best_lag_plot(flights_daily_mean):
 
