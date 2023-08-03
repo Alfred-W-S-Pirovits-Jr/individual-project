@@ -136,6 +136,7 @@ def rolling_average_baselines(train, validate, yhat_df, eval_df):
     return eval_df
 
 #returns seasonal only returns fit 3 for now as it is the best for AA but will work on later
+#plan on keeping all the fits and picking min automated after MVP
 def holts_average_delay(train, validate, yhat_df, eval_df):
     
     #Loops through all the fits
