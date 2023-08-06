@@ -26,23 +26,23 @@ ___
 
 ## <a name="project_goals"></a> Project Goals:
 - Explore 10 csv's of data including information on airline data from 2009 to 2019 for the flights in North America
-- Make sense of the data nnd try and see if I can use it to discover underlying patterns in airline delays both at the Airline Level and at the National Airspace level
-- Clean the data to only use time information after which, if time permits, maybe add in other features.
+- Make sense of the data and try and see if I can use it to discover underlying patterns in airline delays both at the Airline Level and at the National Airspace level
+- Clean the data to only use time information, after which, if time permits, maybe add in other features.
 - Try and create a viable model that can predict airline delays based on historical trends
 
 ## <a name="project_description"></a>Project Description:
 [[Back to top](#top)]
-The purpose of this project is to look at all of the massive amounts of data and see if I can garner greneral trends that may prove useful to the general aviation community.  I suspect that there is a yearly pattern that holds and dictates delays given the four seasons in a year but it would be nice to show that there is a repeatable trend.  Also I am wondering if these results will be different by major airlines as they often own different hubs in the transportations.  Different airports have diffenent airlines operating out of them as main hubs.
+The purpose of this project is to look at all of the massive amounts of data and see if I can garner greneral trends that may prove useful to the general aviation community.  I suspected that there is a yearly pattern that holds and dictates delays given the four seasons in a year but it would be nice to show that there is a repeatable trend.  Also I am wondering if these results will be different by major airlines as they often own different hubs in the transportation network.  Different airports have diffenent airlines operating out of them as main hubs.
 ***
 ## <a name="planning"></a>Project Planning:    
 [[Back to top](#top)]
-The main goal of the project was to explore the data presented and see what I could discover.  Since there is a lot of data to go through I want to ct it down into a manageable set of features that I could use to characterize delays.  I am relying on domain knowledge as a holder of a Commercial Pilot's License to choose initial features as appropriate.  After doing this, I wanted to initially choose a representative airline to do the initial model.  United Airlines is a great choice since it's main hubs span the entire system and covers most of the major regions in the United States National Airspace Syste.
+The main goal of the project was to explore the data presented and see what I could discover.  Since there is a lot of data to go through I want to cut it down into a manageable set of features that I could use to characterize delays.  I am relying on domain knowledge as a holder of a Commercial Pilot's License to choose initial features as appropriate.  After doing this, I wanted to initially choose a representative airline to do the initial model.  United Airlines is a great choice since it's main hubs span the entire system and covers most of the major regions in the United States National Airspace System.
 
 
 
         
 ### Hypothesis
-The main hypothesis is that there would be a meaningful seasonal perodicity to the data as the seasons correlate to delays year over year.  I was also suspecting  
+The main hypothesis is that there would be a meaningful seasonal perodicity to the data as the seasons correlate to delays year over year-and that periodicity can be used to build a model that can anticipate delays in the National Airspace System.  I was also suspecting the opposite of what I observed.  I thought that there would be a higher average delay in the winter as opposed to the summer but that is the opposite of what I found.  Perhaps the airlines have taken weather delays into account in the winter time but have not done the same in the summer.  Or perhaps holts seasonal trend was able to extract more meaningful delays from the summer time but the winter data proved more residual heavy and attributed less of the delays to a seasoal pattern.  This might make sense given the fact that weather phenomena cross the us in timeframes less than two weeks, especially during the winter when systems cross the us much faster than they do in the summer.  More analysis is necessary to really hash out the details here.
 
 
 
@@ -157,3 +157,14 @@ This is a long way away from a viable real world product.  However it is a very 
     - The seasonal trend IS useful and can inform expected delays given the time of the year
     - There are a lot of residuals...more on that below in next steps
     - Even the best models couldn't predict COVID!!!
+
+***
+
+## <a name="Next Steps"></a>Next Steps:
+[[Back to top](#top)]
+A general game plan for next steps is as follows:
+    -  See if I can get the historical METAR data and append it to the original dataset by destination and arrival information for every flight
+    -  Then I would see if I can do a classification based on weather and other columns that are in the dataset focusing on high recall for delays...specifically weather delays.
+    -  I would then create a new column that interpolates average delays from this model at a daily resolution.
+    -  From there I would construct a linear regression based on features to be discovered that can accurately predict the deviation from the expected delays based on time of year.  This should catch at least a portion of the residuals that are observed here.
+    -  I would then construct a seperate model for Carrier Delays and Late Aircraft Delays in order to see if there is anything meaningful there. 
